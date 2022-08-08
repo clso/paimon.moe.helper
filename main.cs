@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Text.RegularExpressions;
-using System.Windows;
+using System.Windows.Forms;
 
 namespace ConsoleApplication1
 {
@@ -34,8 +34,8 @@ namespace ConsoleApplication1
 			Match m = Regex.Match(log, "^OnGetWebViewPageFinish:(.+)$", RegexOptions.IgnoreCase | RegexOptions.Multiline);
 			if( m.Success ) {
 				Console.WriteLine("Copy to Clipboard: " + m.Groups[1].Value);
-				// ref assembly PresentationCore.dll
-				Clipboard.SetDataObject(m.Groups[1].Value);
+				// ref assembly System.Windows.Forms.dll
+				Clipboard.SetDataObject(m.Groups[1].Value, true);
 
 				System.Media.SystemSounds.Beep.Play();
 				//Console.Beep();
