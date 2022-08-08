@@ -4,7 +4,7 @@
 Imports System.IO
 Imports System.Text
 Imports System.Text.RegularExpressions
-Imports System.Windows
+Imports System.Windows.Forms
 
 Module paimon_moe_helper
 
@@ -30,8 +30,8 @@ Module paimon_moe_helper
 		Dim m As Match = Regex.Match(log, "^OnGetWebViewPageFinish:(.+)$", RegexOptions.IgnoreCase Or RegexOptions.Multiline)
 		If m.Success Then
 			Console.WriteLine("Copy to Clipboard: " & m.Groups(1).Value)
-			' ref assembly PresentationCore.dll
-			Clipboard.SetDataObject(m.Groups(1).Value)
+			' ref assembly System.Windows.Forms.dll
+			Clipboard.SetDataObject(m.Groups(1).Value, True)
 
 			Beep()
 			'Console.Beep()
