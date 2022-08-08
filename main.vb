@@ -27,7 +27,16 @@ Module paimon_moe_helper
 		Dim log As String = sr.ReadToEnd()
 		sr.Close()
 
-		Dim m As Match = Regex.Match(log, "^OnGetWebViewPageFinish:(.+)$", RegexOptions.IgnoreCase Or RegexOptions.Multiline)
+		Dim mc As MatchCollection = Regex.Matches(log, "^OnGetWebViewPageFinish:(.+)$", RegexOptions.IgnoreCase Or RegexOptions.Multiline)
+		Dim m As Match
+		If mc.Count > 0 Then
+			m = mc(mc.Count - 1)
+		Else
+			Console.WriteLine("Cannot find the log file! Make sure to open the wish history first!")
+			Console.ReadLine()
+			Return
+		End If
+		
 		If m.Success Then
 			Console.WriteLine("Copy to Clipboard: " & m.Groups(1).Value)
 			' ref assembly System.Windows.Forms.dll
