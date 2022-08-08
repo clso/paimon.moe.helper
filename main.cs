@@ -31,7 +31,16 @@ namespace ConsoleApplication1
 			string log = sr.ReadToEnd();
 			sr.Close();
 
-			Match m = Regex.Match(log, "^OnGetWebViewPageFinish:(.+)$", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+			MatchCollection mc = Regex.Matches(log, "^OnGetWebViewPageFinish:(.+)$", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+			Match m;
+			if( mc.Count > 0 ) {
+				m = mc[mc.Count - 1];
+			} else {
+				Console.WriteLine("Cannot find the log file! Make sure to open the wish history first!");
+				Console.ReadLine();
+				return;
+			}
+			
 			if( m.Success ) {
 				Console.WriteLine("Copy to Clipboard: " + m.Groups[1].Value);
 				// ref assembly System.Windows.Forms.dll
