@@ -1,3 +1,6 @@
+// paimon.moe import helper
+// https://paimon.moe/wish/import
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
