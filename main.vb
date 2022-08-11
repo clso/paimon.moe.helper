@@ -11,7 +11,7 @@ Module paimon_moe_helper
 	Sub Main(ByVal pars As String())
 		Dim args As New List(Of String)(pars)
 		Dim logPath As String = "%userprofile%\AppData\LocalLow\miHoYo\Genshin Impact\output_log.txt"
-		If args.Contains("-CN") Then
+		If args.Contains("-CN", StringComparer.OrdinalIgnoreCase) Then
 			logPath = "%userprofile%\AppData\LocalLow\miHoYo\原神\output_log.txt"
 		End If
 		logPath = Environment.ExpandEnvironmentVariables(logPath)
@@ -22,34 +22,25 @@ Module paimon_moe_helper
 			Return
 		End If
 
-		Dim fs = New FileStream(logPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
-		Dim sr As New StreamReader(fs, Encoding.UTF8)
-		Dim log As String = sr.ReadToEnd()
-		sr.Close()
+		Dim log As String
+		Using fs = New FileStream(logPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
+			log = New StreamReader(fs, Encoding.UTF8).ReadToEnd()
+		End Using
 
 		Dim mc As MatchCollection = Regex.Matches(log, "^OnGetWebViewPageFinish:(.+)$", RegexOptions.IgnoreCase Or RegexOptions.Multiline)
-		Dim m As Match
 		If mc.Count > 0 Then
-			m = mc(mc.Count - 1)
-		Else
-			Console.WriteLine("Cannot find the log file! Make sure to open the wish history first!")
-			Console.ReadLine()
-			Return
-		End If
-		
-		If m.Success Then
+			Dim m As Match = mc(mc.Count - 1)
+
 			Console.WriteLine("Copy to Clipboard: " & m.Groups(1).Value)
 			' ref assembly System.Windows.Forms.dll
 			Clipboard.SetDataObject(m.Groups(1).Value, True)
 
 			Beep()
-			'Console.Beep()
 			'Console.ReadLine()
 		Else
 			Console.WriteLine("Cannot find the log file! Make sure to open the wish history first!")
 			Console.ReadLine()
 		End If
-
 
 	End Sub
 
