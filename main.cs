@@ -32,9 +32,8 @@ namespace paimon_moe_helper
 			}
 
 			MatchCollection mc = Regex.Matches(log, "^OnGetWebViewPageFinish:(.+)$", RegexOptions.IgnoreCase | RegexOptions.Multiline);
-			Match m;
 			if( mc.Count > 0 ) {
-				m = mc[mc.Count - 1];
+				Match m = mc[mc.Count - 1];
 
 				Console.WriteLine("Copy to Clipboard: " + m.Groups[1].Value);
 				// ref assembly System.Windows.Forms.dll
