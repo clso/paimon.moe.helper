@@ -1,5 +1,5 @@
-这是一个 https://paimon.moe/wish/import 的Windows可执行版本  
-This is a Windows executable version from https://paimon.moe/wish/import  
+这是一个 https://paimon.moe/wish/import 的Windows版本导入工具  
+This is a Windows version import tool to https://paimon.moe/wish/import  
   
 您可以点此下载应用程序  
 You can download the app here  
