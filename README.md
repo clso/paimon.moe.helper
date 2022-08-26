@@ -5,6 +5,16 @@ This is a Windows version import tool to https://paimon.moe/wish/import
 Now supported for Genshin v3.0  
 灵感来源 Inspired by  
 https://github.com/EnderSyth/Genshin-Wish-Export  
+
+使用方法：
+1. 打开祈愿界面
+2. 按下 `Ctrl+A` 和 `Ctrl+C`
+3. 执行此程序
+
+Usage：
+1. Open Wish History
+2. Press `Ctrl+A` and `Ctrl+C`
+3. Execute this program
   
 您可以点此下载应用程序  
 You can download the app here  
