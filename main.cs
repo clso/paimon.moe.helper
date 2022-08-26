@@ -13,42 +13,47 @@ namespace paimon_moe_helper
 {
 	class Program
 	{
+		private static string ParserClipboarUrl()
+		{
+			if( !Clipboard.ContainsText(TextDataFormat.Html) ) {
+				return null;
+			}
+
+			string html = null;
+
+			using( MemoryStream ms = (MemoryStream)Clipboard.GetData("Html Format") ) {
+				ms.Position = 0;
+				byte[] bs = new byte[ms.Length - 1];
+				ms.Read(bs, 0, bs.Length);
+				html = Encoding.UTF8.GetString(bs);
+			}
+
+			if( html == null )
+				return null;
+
+			Match m = Regex.Match(html, "^SourceURL:(.+?)$", RegexOptions.IgnoreCase | RegexOptions.Multiline);
+			if( m.Success ) {
+				return m.Groups[1].Value;
+			} else {
+				return null;
+			}
+		}
+
 		[STAThread]
 		static void Main(string[] pars)
 		{
-			List<string> args = new List<string>(pars);
-			string logPath = "%userprofile%\\AppData\\LocalLow\\miHoYo\\Genshin Impact\\output_log.txt";
-			if( args.Contains("-CN", StringComparer.OrdinalIgnoreCase) ) {
-				logPath = "%userprofile%\\AppData\\LocalLow\\miHoYo\\原神\\output_log.txt";
-			}
-			logPath = Environment.ExpandEnvironmentVariables(logPath);
+			string alert = "Frist open the Genshin wish history, press Ctrl+A and Ctrl+C, then execute this program!\r\n首先打开原神的祈愿历史，然后按下 Ctrl+A 和 Ctrl+C，最后再打开此程序！";
 
-			if( !File.Exists(logPath) ) {
-				Console.WriteLine("Cannot find the log file! Make sure to open the wish history first!");
+			string url = ParserClipboarUrl();
+
+			if( url == null ) {
+				Console.WriteLine(alert);
 				Console.ReadLine();
-				return;
-			}
-
-			string log;
-			using( FileStream fs = new FileStream(logPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite) ) {
-				log = new StreamReader(fs, Encoding.UTF8).ReadToEnd();
-			}
-
-			MatchCollection mc = Regex.Matches(log, "^OnGetWebViewPageFinish:(.+)$", RegexOptions.IgnoreCase | RegexOptions.Multiline);
-			if( mc.Count > 0 ) {
-				Match m = mc[mc.Count - 1];
-
-				Console.WriteLine("Copy to Clipboard: " + m.Groups[1].Value);
-				// ref assembly System.Windows.Forms.dll
-				Clipboard.SetDataObject(m.Groups[1].Value, true);
-
-				System.Media.SystemSounds.Beep.Play();
-				//Console.ReadLine();
 			} else {
-				Console.WriteLine("Cannot find the log file! Make sure to open the wish history first!");
+				Console.WriteLine("Copy to Clipboard: " + url);
+				Clipboard.SetDataObject(url, true);
 				Console.ReadLine();
 			}
-
 		}
 	}
 }
