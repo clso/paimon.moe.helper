@@ -8,37 +8,41 @@ Imports System.Windows.Forms
 
 Module paimon_moe_helper
 
-	Sub Main(ByVal pars As String())
-		Dim args As New List(Of String)(pars)
-		Dim logPath As String = "%userprofile%\AppData\LocalLow\miHoYo\Genshin Impact\output_log.txt"
-		If args.Contains("-CN", StringComparer.OrdinalIgnoreCase) Then
-			logPath = "%userprofile%\AppData\LocalLow\miHoYo\原神\output_log.txt"
-		End If
-		logPath = Environment.ExpandEnvironmentVariables(logPath)
-
-		If Not File.Exists(logPath) Then
-			Console.WriteLine("Cannot find the log file! Make sure to open the wish history first!")
-			Console.ReadLine()
-			Return
+	Private Function ParserClipboarUrl() As String
+		If Not Clipboard.ContainsText(TextDataFormat.Html) Then
+			Return Nothing
 		End If
 
-		Dim log As String
-		Using fs = New FileStream(logPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
-			log = New StreamReader(fs, Encoding.UTF8).ReadToEnd()
+		Dim html As String = Nothing
+
+		Using ms As MemoryStream = Clipboard.GetData("Html Format")
+			ms.Position = 0
+			Dim bs(ms.Length - 1) As Byte
+			ms.Read(bs, 0, bs.Length)
+			html = Encoding.UTF8.GetString(bs)
 		End Using
 
-		Dim mc As MatchCollection = Regex.Matches(log, "^OnGetWebViewPageFinish:(.+)$", RegexOptions.IgnoreCase Or RegexOptions.Multiline)
-		If mc.Count > 0 Then
-			Dim m As Match = mc(mc.Count - 1)
+		If html = Nothing Then Return Nothing
 
-			Console.WriteLine("Copy to Clipboard: " & m.Groups(1).Value)
-			' ref assembly System.Windows.Forms.dll
-			Clipboard.SetDataObject(m.Groups(1).Value, True)
-
-			Beep()
-			'Console.ReadLine()
+		Dim m As Match = Regex.Match(html, "^SourceURL:(.+?)$", RegexOptions.IgnoreCase Or RegexOptions.Multiline)
+		If m.Success Then
+			Return m.Groups(1).Value
 		Else
-			Console.WriteLine("Cannot find the log file! Make sure to open the wish history first!")
+			Return Nothing
+		End If
+	End Function
+
+	Sub Main(ByVal pars As String())
+		Dim alert As String = "Frist open the Genshin wish history, press Ctrl+A and Ctrl+C, then execute this program!" & vbCrLf & "首先打开原神的祈愿历史，然后按下 Ctrl+A 和 Ctrl+C，最后再打开此程序！"
+
+		Dim url As String = ParserClipboarUrl()
+
+		If url = Nothing Then
+			Console.WriteLine(alert)
+			Console.ReadLine()
+		Else
+			Console.WriteLine("Copy to Clipboard: " & url)
+			Clipboard.SetDataObject(url, True)
 			Console.ReadLine()
 		End If
 
