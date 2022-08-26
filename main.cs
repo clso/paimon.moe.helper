@@ -40,7 +40,7 @@ namespace paimon_moe_helper
 		}
 
 		[STAThread]
-		static void Main(string[] pars)
+		static void Main()
 		{
 			string alert = "Frist open the Genshin wish history, press Ctrl+A and Ctrl+C, then execute this program!\r\n首先打开原神的祈愿历史，然后按下 Ctrl+A 和 Ctrl+C，最后再打开此程序！";
 
