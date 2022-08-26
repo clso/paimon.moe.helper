@@ -1,5 +1,10 @@
 这是一个 https://paimon.moe/wish/import 的Windows版本导入工具  
 This is a Windows version import tool to https://paimon.moe/wish/import  
+
+现在已支持原神3.0版的导入  
+Now supported for Genshin v3.0  
+灵感来源 Inspired by  
+https://github.com/EnderSyth/Genshin-Wish-Export  
   
 您可以点此下载应用程序  
 You can download the app here  
