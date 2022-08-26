@@ -32,7 +32,7 @@ Module paimon_moe_helper
 		End If
 	End Function
 
-	Sub Main(ByVal pars As String())
+	Sub Main()
 		Dim alert As String = "Frist open the Genshin wish history, press Ctrl+A and Ctrl+C, then execute this program!" & vbCrLf & "首先打开原神的祈愿历史，然后按下 Ctrl+A 和 Ctrl+C，最后再打开此程序！"
 
 		Dim url As String = ParserClipboarUrl()
